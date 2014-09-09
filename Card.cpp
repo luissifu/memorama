@@ -51,6 +51,11 @@ void Card::draw() {
 	}
 }
 
-bool inside() {
-	return false;
+bool Card::inside(int px, int py) {
+	if (px < x || px > x + width)
+		return false;
+	else if (py < y || py > y + height)
+		return false;
+
+	return true;
 }

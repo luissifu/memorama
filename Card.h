@@ -21,7 +21,7 @@ class Card {
 		int getValue();
 		void setValue(int value);
 		void draw();
-		bool inside();
+		bool inside(int px, int py);
 	private:
 		int value;
 		bool show;
