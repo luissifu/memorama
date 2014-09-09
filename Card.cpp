@@ -30,23 +30,27 @@ void Card::setValue(int value) {
 	this->value = value;
 }
 
-void Card::draw(int x, int y) {
+void Card::draw() {
 	glColor3ub(255,255,255);
 	glBegin(GL_POLYGON);
-		glVertex2f(    x,   y);
-		glVertex2f( x+50,   y);
-		glVertex2f( x+50, y+50);
-		glVertex2f(    x, y+50);
+		glVertex2f(       x,        y);
+		glVertex2f( x+width,        y);
+		glVertex2f( x+width, y+height);
+		glVertex2f(       x, y+height);
 	glEnd();
 
-	if (show)
+	if (!show)
 	{
-		glColor3ub(0,255,0);
+		glColor3ub(255,0,0);
 		glBegin(GL_POLYGON);
-			glVertex2f(  x+5,  y+5);
-			glVertex2f( x+45,  y+5);
-			glVertex2f( x+45, y+45);
-			glVertex2f(  x+5, y+45);
+			glVertex2f(       x+5,        y+5);
+			glVertex2f( x+width-5,        y+5);
+			glVertex2f( x+width-5, y+height-5);
+			glVertex2f(       x+5, y+height-5);
 		glEnd();
 	}
+}
+
+bool inside() {
+	return false;
 }

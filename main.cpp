@@ -1,36 +1,15 @@
 /*
- * GLUT Shapes Demo
- *
- * Written by Nigel Stewart November 2003
- *
- * This program is test harness for the sphere, cone
- * and torus shapes in GLUT.
- *
- * Spinning wireframe and smooth shaded shapes are
- * displayed until the ESC or q key is pressed.  The
- * number of geometry stacks and slices can be adjusted
- * using the + and - keys.
+ Luis Sifuentes
+ Jose Padilla
  */
-#include <windows.h>
-#ifdef __APPLE__
-#include <GLUT/glut.h>
-#else
-#include <GL/glut.h>
-#endif
+#include "includeGL.h"
+#include "Card.h"
 
 #include <stdlib.h>
 #include <sstream>
 
-
-struct color {
-	int r;
-	int g;
-	int b;
-};
-
-
-color stopped;
-color running;
+const int cardNum = 18;
+const int rows = 3;
 
 const int winWidth = 500;
 const int winHeight = 500;
@@ -38,20 +17,27 @@ const int winHeight = 500;
 const int glWidth = 500;
 const int glHeight = 500;
 
+const int cardWidth = 50;
+const int cardHeight = 80;
+
+
 int elapsed_time = 0;
 bool started = false;
+
+Card cards[cardNum];
 
 void init() {
 	glClearColor(0.54,0.73,0.05,1.0);
 	gluOrtho2D(0, glWidth, glHeight, 0);
 
-	stopped.r = 48;
-	stopped.g = 98;
-	stopped.b = 48;
-
-	running.r = 15;
-	running.g = 56;
-	running.b = 15;
+	for (int i = 0; i < cardNum; i++)
+	{
+		cards[i].width = cardWidth;
+		cards[i].height = cardHeight;
+		cards[i].x = (cardWidth + 10) * (i % (cardNum / rows)) + 10;
+		cards[i].y = (cardHeight + 10) * (i / (cardNum / rows)) + 10;
+		cards[i].setValue(1);
+	}
 }
 
 std::string toString(int value) {
@@ -99,54 +85,24 @@ void convertTime(int t) {
 
 	timedisp += ".";
 	timedisp += toString(ms);
+}
 
+void mouse() {
 
-	if (started)
-	{
-		drawText(200, 250, timedisp, GLUT_BITMAP_TIMES_ROMAN_24, running.r, running.g, running.b);
-	}
-	else
-	{
-		drawText(200, 250, timedisp, GLUT_BITMAP_TIMES_ROMAN_24, stopped.r, stopped.g, stopped.b);
-	}
 }
 
 void display() {
 	glClear(GL_COLOR_BUFFER_BIT);
 		convertTime(elapsed_time);
 
-
-	drawText(50, 420, "S-Start", GLUT_BITMAP_HELVETICA_18,running.r, running.g, running.b);
-	drawText(150, 420, "D-Detener", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
-	drawText(250, 420, "R-Reiniciar", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
-	drawText(400, 480, "Esc-Salir", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
-    drawText(20, 460, "Luis Eduardo Sifuentes a01138688", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
-    drawText(20, 480, "Jose Luis Padilla a01136406", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
-
-
-
+		for (int i = 0; i < cardNum; i++)
+		{
+			cards[i].draw();
+		}
 
 	glFlush();
 }
-/*
-void draw3dString (void *font, char *s, float x, float y, float z)
-{
-unsigned int i;
-glMatrixMode(GL_MODELVIEW);
 
-glPushMatrix();
-glTranslatef(x, y, z);
-if (opcion == 1)
-glScaled(0.005, 0.005, 0.0002);
-else
-glScaled(0.0009, 0.0009, 0.0009);
-
-// if (!dibujaPortada && opcion ==1) glRotatef(45, 1, 0, 0);
-for (i = 0; i < s[i] != '\0'; i++)
-glutStrokeCharacter(GLUT_STROKE_ROMAN, s[i]);
-glPopMatrix();
-}
-*/
 void keyboard(unsigned char key, int x, int y) {
 	switch(key)
 	{
@@ -170,8 +126,6 @@ void keyboard(unsigned char key, int x, int y) {
 		break;
 	}
 
-	//printf("%c", key);
-
 	glutPostRedisplay();
 }
 
@@ -181,7 +135,6 @@ int main(int argc, char** argv) {
 	glutInitWindowSize(winWidth,winHeight);
 	glutInitWindowPosition(100, 100);
 	glutCreateWindow("Cronometro");
-	//glutReshapeFunc(handleResize);
 	init();
 	glutTimerFunc(100, timer, 0);
 	glutDisplayFunc(display);
