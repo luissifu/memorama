@@ -32,11 +32,11 @@ struct color {
 color stopped;
 color running;
 
-const int winWidth = 500;
-const int winHeight = 500;
+const int winWidth = 900;
+const int winHeight = 600;
 
-const int glWidth = 500;
-const int glHeight = 500;
+const int glWidth = 900;
+const int glHeight = 600;
 
 int elapsed_time = 0;
 bool started = false;
@@ -103,11 +103,11 @@ void convertTime(int t) {
 
 	if (started)
 	{
-		drawText(200, 250, timedisp, GLUT_BITMAP_TIMES_ROMAN_24, running.r, running.g, running.b);
+		drawText(100, 451, timedisp, GLUT_BITMAP_TIMES_ROMAN_24, running.r, running.g, running.b);
 	}
 	else
 	{
-		drawText(200, 250, timedisp, GLUT_BITMAP_TIMES_ROMAN_24, stopped.r, stopped.g, stopped.b);
+		drawText(100, 451, timedisp, GLUT_BITMAP_TIMES_ROMAN_24, stopped.r, stopped.g, stopped.b);
 	}
 }
 
@@ -115,13 +115,14 @@ void display() {
 	glClear(GL_COLOR_BUFFER_BIT);
 		convertTime(elapsed_time);
 
-
-	drawText(50, 420, "S-Start", GLUT_BITMAP_HELVETICA_18,running.r, running.g, running.b);
-	drawText(150, 420, "D-Detener", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
-	drawText(250, 420, "R-Reiniciar", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
-	drawText(400, 480, "Esc-Salir", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
-    drawText(20, 460, "Luis Eduardo Sifuentes a01138688", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
-    drawText(20, 480, "Jose Luis Padilla a01136406", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
+    drawText(700, 450, "Turnos: ", GLUT_BITMAP_HELVETICA_18,running.r, running.g, running.b);
+    drawText(025, 450, "Tiempo: ", GLUT_BITMAP_HELVETICA_18,running.r, running.g, running.b);
+	drawText(250, 500, "S-Start", GLUT_BITMAP_HELVETICA_18,running.r, running.g, running.b);
+	drawText(400, 500, "D-Detener", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
+	drawText(550, 500, "R-Reiniciar", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
+	drawText(800, 580, "Esc-Salir", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
+    drawText(20, 560, "Luis Eduardo Sifuentes a01138688", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
+    drawText(20, 580, "Jose Luis Padilla a01136406", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
 
 
 
@@ -180,7 +181,7 @@ int main(int argc, char** argv) {
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
 	glutInitWindowSize(winWidth,winHeight);
 	glutInitWindowPosition(100, 100);
-	glutCreateWindow("Cronometro");
+	glutCreateWindow("memorama");
 	//glutReshapeFunc(handleResize);
 	init();
 	glutTimerFunc(100, timer, 0);
