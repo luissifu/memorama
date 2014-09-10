@@ -136,7 +136,7 @@ void gameInit() {
 
 
 void init() {
-	glClearColor(0.54,0.73,0.05,1.0);
+	glClearColor(0.011, 0.75, 0.23, 1.0);
 	gluOrtho2D(0, glWidth, glHeight, 0);
 
 	stopped.r = 48;
@@ -174,7 +174,7 @@ void drawText(int x, int y, std::string text, void* font, int r, int g, int b) {
 	}
 }
 
-void convertTime(int t) {
+std::string convertTime(int t) {
 	int ms = t % 10;
 	int nt = t / 10;
 	int s = nt % 60;
@@ -194,14 +194,7 @@ void convertTime(int t) {
 	timedisp += ".";
 	timedisp += toString(ms);
 
-	if (started)
-	{
-		drawText(100, 451, timedisp, GLUT_BITMAP_TIMES_ROMAN_24, running.r, running.g, running.b);
-	}
-	else
-	{
-		drawText(100, 451, timedisp, GLUT_BITMAP_TIMES_ROMAN_24, stopped.r, stopped.g, stopped.b);
-	}
+    return timedisp;
 }
 
 void mouse(int button, int state, int mx, int my) {
@@ -280,7 +273,16 @@ void mouse(int button, int state, int mx, int my) {
 
 void display() {
 	glClear(GL_COLOR_BUFFER_BIT);
-		convertTime(elapsed_time);
+
+
+        if (started)
+        {
+            drawText(100, 451, convertTime(elapsed_time), GLUT_BITMAP_TIMES_ROMAN_24, running.r, running.g, running.b);
+        }
+        else
+        {
+            drawText(100, 451, convertTime(elapsed_time), GLUT_BITMAP_TIMES_ROMAN_24, stopped.r, stopped.g, stopped.b);
+        }
 
 		for (int i = 0; i < cardNum; i++)
 		{
@@ -302,6 +304,7 @@ void display() {
 		drawText(250, 500, "I-Iniciar", GLUT_BITMAP_HELVETICA_18,running.r, running.g, running.b);
 		drawText(400, 500, "P-Pausar", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
 		drawText(550, 500, "R-Reiniciar", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
+		drawText(670, 530, "A-Mostrar/Ocultar Ayuda", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
 		drawText(800, 580, "Esc-Salir", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
 		drawText(20, 560, "Luis Eduardo Sifuentes a01138688", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
 		drawText(20, 580, "Jose Luis Padilla a01136406", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
@@ -318,13 +321,15 @@ void display() {
 			drawText(250, 250, "Felicidades Ganaste en:", GLUT_BITMAP_HELVETICA_18, stopped.r, stopped.g, stopped.b);
 			drawText(450, 250,toString(turno), GLUT_BITMAP_HELVETICA_18, stopped.r, stopped.g, stopped.b);
 			drawText(500, 250, "turnos", GLUT_BITMAP_HELVETICA_18, stopped.r, stopped.g, stopped.b);
+			drawText(250, 300, "Tu tiempo fue:", GLUT_BITMAP_HELVETICA_18, stopped.r, stopped.g, stopped.b);
+			drawText(500, 300, convertTime(elapsed_time), GLUT_BITMAP_HELVETICA_18, stopped.r, stopped.g, stopped.b);
 
 			started = false;
 		}
 	glFlush();
 }
 
-typedef enum {autor1,autor2,menuiniciar,menureiniciar,menupausar,menuexit}
+typedef enum {autor1,autor2,menuiniciar,menureiniciar,menupausar,menuayuda,menuexit}
 opcionesMenu;
 
 void onMenu(int opcion) {
@@ -342,6 +347,9 @@ void onMenu(int opcion) {
         break;
 		case menureiniciar:
 			gameInit();
+        break;
+        case menuayuda:
+			showHelp=!showHelp;
         break;
 		case menuexit:
 			exit(0);
@@ -362,6 +370,7 @@ void creacionMenu(void) {
     glutAddMenuEntry("Iniciar", menuiniciar);
     glutAddMenuEntry("Pausar", menupausar);
     glutAddMenuEntry("Reiniciar", menureiniciar);
+    glutAddMenuEntry("Ayuda",menuayuda);
     glutAddMenuEntry("Salir", menuexit);
     glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
@@ -383,6 +392,10 @@ void keyboard(unsigned char key, int x, int y) {
 		case 'R':
 		case 'r':
 			gameInit();
+		break;
+		case 'a':
+		case 'A':
+			showHelp=!showHelp;
 		break;
 		default:
 		break;
