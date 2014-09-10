@@ -25,6 +25,7 @@ const int cardHeight = 110;
 
 int elapsed_time = 0;
 bool started = false;
+bool showHelp = true;
 int turno = 0;
 int pares = 0;
 
@@ -288,7 +289,11 @@ void display() {
 			{
 				drawText(cards[i].x + cardWidth / 2 - 5, cards[i].y + cardHeight / 2, toString(cards[i].getValue()), GLUT_BITMAP_HELVETICA_18, 0, 0, 0);
 			}
-			drawText(cards[i].x+10, cards[i].y+25, toString(cards[i].getValue()), GLUT_BITMAP_HELVETICA_18, 0, 0, 255);
+
+			if (showHelp)
+			{
+				drawText(cards[i].x + 10, cards[i].y + 25, toString(cards[i].getValue()), GLUT_BITMAP_HELVETICA_18, 0, 0, 255);
+			}
 		}
 
 		drawText(700, 450, "Turnos: ", GLUT_BITMAP_HELVETICA_18,running.r, running.g, running.b);
@@ -318,45 +323,46 @@ void display() {
 		}
 	glFlush();
 }
-typedef enum {FONDO1,FONDO2,menuiniciar,menureiniciar,menupausar,menuexit}
+
+typedef enum {autor1,autor2,menuiniciar,menureiniciar,menupausar,menuexit}
 opcionesMenu;
-void onMenu(int opcion)
-{
+
+void onMenu(int opcion) {
     switch(opcion)
     {
-    case FONDO1:
+		case autor1:
         break;
-    case FONDO2:
+		case autor2:
         break;
-    case menupausar:
-        started=false;
+		case menupausar:
+			started=false;
         break;
-    case menuiniciar:// Blanco 3
-        started=true;
+		case menuiniciar:
+			started=true;
         break;
-    case menureiniciar: // Blanco 3
-        gameInit();
+		case menureiniciar:
+			gameInit();
         break;
-    case menuexit:
-        exit(0);
+		case menuexit:
+			exit(0);
         break;
     }
     glutPostRedisplay();
 }
-void creacionMenu(void)
-{
-    int menuFondo,menuPrincipal;
 
-    menuFondo = glutCreateMenu(onMenu);
-    glutAddMenuEntry("Luis Eduardo Sifuentes A01138688", FONDO1);
-    glutAddMenuEntry("Jose Luis Padilla A01136406", FONDO2);
+void creacionMenu(void) {
+    int menuAutores, menuPrincipal;
+
+    menuAutores = glutCreateMenu(onMenu);
+    glutAddMenuEntry("Luis Eduardo Sifuentes A01138688", autor1);
+    glutAddMenuEntry("Jose Luis Padilla A01136406", autor2);
 
     menuPrincipal = glutCreateMenu(onMenu);
-    glutAddSubMenu("Autores ", menuFondo);
+    glutAddSubMenu("Autores ", menuAutores);
     glutAddMenuEntry("Iniciar", menuiniciar);
     glutAddMenuEntry("Pausar", menupausar);
     glutAddMenuEntry("Reiniciar", menureiniciar);
-    glutAddMenuEntry("salir", menuexit);
+    glutAddMenuEntry("Salir", menuexit);
     glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 
@@ -387,9 +393,6 @@ void keyboard(unsigned char key, int x, int y) {
 
 void reshape(int newWidth, int newHeight) {
 	glViewport(0, 0, newWidth, newHeight);
-	//glMatrixMode(GL_PROJECTION);
-	//glLoadIdentity();
-	//gluOrtho2D(0, newWidth, newHeight, 0);
 
 	winWidth = newWidth;
 	winHeight = newHeight;
