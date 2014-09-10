@@ -14,8 +14,8 @@
 const int cardNum = 27;
 const int rows = 3;
 
-const int winWidth = 900;
-const int winHeight = 600;
+int winWidth = 900;
+int winHeight = 600;
 
 const int glWidth = 900;
 const int glHeight = 600;
@@ -203,7 +203,10 @@ void convertTime(int t) {
 	}
 }
 
-void mouse(int button, int state, int x, int y) {
+void mouse(int button, int state, int mx, int my) {
+	int x = mx * glWidth / winWidth;
+	int y = my * glHeight / winHeight;
+	
 	if (!started)
 		started = true;
 	
@@ -341,6 +344,16 @@ void keyboard(unsigned char key, int x, int y) {
 	glutPostRedisplay();
 }
 
+void reshape(int newWidth, int newHeight) {
+	glViewport(0, 0, newWidth, newHeight);
+	//glMatrixMode(GL_PROJECTION);
+	//glLoadIdentity();
+	//gluOrtho2D(0, newWidth, newHeight, 0);
+	
+	winWidth = newWidth;
+	winHeight = newHeight;
+}
+
 int main(int argc, char** argv) {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
@@ -350,6 +363,7 @@ int main(int argc, char** argv) {
 	init();
 	gameInit();
 	glutTimerFunc(100, timer, 0);
+	glutReshapeFunc(reshape);
 	glutDisplayFunc(display);
 	glutKeyboardFunc(keyboard);
 	glutMouseFunc(mouse);
