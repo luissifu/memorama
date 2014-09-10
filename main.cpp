@@ -4,7 +4,7 @@
  */
 #include "includeGL.h"
 #include "Card.h"
-
+#include <cstdlib>
 #include <ctime>
 #include <stack>
 #include <stdio.h>
@@ -25,13 +25,24 @@ const int cardHeight = 110;
 
 int elapsed_time = 0;
 bool started = false;
+int contador=0;
+int turno=0;
+int actual=0;
+int anterior=0;
+int anteriorx=0;
+int anteriory=0;
+int actualx=0;
+int actualy=0;
+int preanterior=-1;
+int preanteriorx=-1;
+int pares=0;
 
 Card cards[cardNum];
 
-struct color { 
-	int r; 
-	int g; 
-	int b; 
+struct color {
+	int r;
+	int g;
+	int b;
 };
 
 color stopped;
@@ -60,7 +71,7 @@ std::stack<int> generatePairs() {
 		}
 
 		instack[rndnum] = true;
-		
+
 		data.push(rndnum);
 	}
 
@@ -79,7 +90,7 @@ std::stack<int> generatePairs() {
 		}
 
 		instack[rndnum] = true;
-		
+
 		data.push(rndnum);
 	}
 
@@ -96,20 +107,23 @@ void gameInit() {
 		cards[i].x = (cardWidth + 10) * (i % (cardNum / rows)) + 50;
 		cards[i].y = (cardHeight + 10) * (i / (cardNum / rows)) + 50;
 		cards[i].setValue(pairs.top());
+		cards[i].setShow(false);
+		turno=0;
 		pairs.pop();
 	}
 }
+
 
 void init() {
 	glClearColor(0.54,0.73,0.05,1.0);
 	gluOrtho2D(0, glWidth, glHeight, 0);
 
-	stopped.r = 48; 
-	stopped.g = 98; 
-	stopped.b = 48; 
-	
-	running.r = 15; 
-	running.g = 56; 
+	stopped.r = 48;
+	stopped.g = 98;
+	stopped.b = 48;
+
+	running.r = 15;
+	running.g = 56;
 	running.b = 15;
 }
 
@@ -158,7 +172,7 @@ void convertTime(int t) {
 
 	timedisp += ".";
 	timedisp += toString(ms);
-	
+
 	if (started)
 	{
 		drawText(100, 451, timedisp, GLUT_BITMAP_TIMES_ROMAN_24, running.r, running.g, running.b);
@@ -170,25 +184,43 @@ void convertTime(int t) {
 }
 
 void mouse(int button, int state, int x, int y) {
+    if (started){
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP)
 	{
-		printf("%d:%d", x, y);
+
 		for (int i = 0; i < cardNum; i++)
 		{
 			if (cards[i].inside(x,y))
 			{
 				cards[i].flip();
+				anterior=actual;
+				actual=cards[i].getValue();
+            	anteriorx=actualx;
+                actualx=i;
+
+
+				contador++;
+
+		if((contador%2)==0){
+            if(anterior != actual){
+                cards[actualx].setShow(false);
+                cards[anteriorx].setShow(false);}
+                else {pares++;}
+
+            turno++;
+		}
 			}
 		}
-	}
 
+	}
+    }
 	glutPostRedisplay();
 }
 
 void display() {
 	glClear(GL_COLOR_BUFFER_BIT);
 		convertTime(elapsed_time);
-		
+
 		for (int i = 0; i < cardNum; i++)
 		{
 			cards[i].draw();
@@ -199,13 +231,30 @@ void display() {
 		}
 
 		drawText(700, 450, "Turnos: ", GLUT_BITMAP_HELVETICA_18,running.r, running.g, running.b);
+		drawText(780, 450, toString(turno), GLUT_BITMAP_HELVETICA_18,running.r, running.g, running.b);
 		drawText(025, 450, "Tiempo: ", GLUT_BITMAP_HELVETICA_18,running.r, running.g, running.b);
-		drawText(250, 500, "S-Start", GLUT_BITMAP_HELVETICA_18,running.r, running.g, running.b);
-		drawText(400, 500, "D-Detener", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
+		drawText(250, 500, "I-Iniciar", GLUT_BITMAP_HELVETICA_18,running.r, running.g, running.b);
+		drawText(400, 500, "P-Pausar", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
 		drawText(550, 500, "R-Reiniciar", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
 		drawText(800, 580, "Esc-Salir", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
 		drawText(20, 560, "Luis Eduardo Sifuentes a01138688", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
 		drawText(20, 580, "Jose Luis Padilla a01136406", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
+		if(pares==8){
+
+            glBegin(GL_POLYGON);//start drawing a line loop
+            glVertex3f(60.0f,100.0f,0.0);//left of window
+            glVertex3f(60.0f,400.0f,0.0f);//bottom of window
+            glVertex3f(840.0f,400.0f,0.0f);//top of window
+            glVertex3f(840.0f,100.0f,0.0f);//right of window
+    glEnd();//end drawing of line loop
+
+
+        drawText(250, 250, "Felicidades Ganaste en:", GLUT_BITMAP_HELVETICA_18, stopped.r, stopped.g, stopped.b);
+        drawText(450, 250,toString(turno), GLUT_BITMAP_HELVETICA_18, stopped.r, stopped.g, stopped.b);
+        drawText(500, 250, "turnos", GLUT_BITMAP_HELVETICA_18, stopped.r, stopped.g, stopped.b);
+
+        started = false;
+		}
 	glFlush();
 }
 
@@ -215,18 +264,19 @@ void keyboard(unsigned char key, int x, int y) {
 		case 27:
 			exit(0);
 			break;
-		case 'S':
-		case 's':
+		case 'I':
+		case 'i':
 			started = true;
 		break;
-		case 'D':
-		case 'd':
+		case 'P':
+		case 'p':
 			started = false;
 		break;
 		case 'R':
 		case 'r':
 			elapsed_time = 0;
 			started = false;
+			gameInit();
 		break;
 		default:
 		break;
