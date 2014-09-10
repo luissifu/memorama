@@ -33,7 +33,7 @@ void Card::setValue(int value) {
 void Card::draw() {
 	if (selected)
 	{
-		glColor3ub(200, 255, 255);
+		glColor3ub(255, 255, 200);
 	}
 	else
 	{

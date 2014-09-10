@@ -255,6 +255,20 @@ void mouse(int button, int state, int x, int y) {
 			}
 		}
 
+		if (pares == (cardNum/3)-1 && first != NULL && second != NULL && third != NULL)
+		{
+			pares++;
+
+			first->setSelected(false);
+			second->setSelected(false);
+			third->setSelected(false);
+
+			first = NULL;
+			second = NULL;
+			third = NULL;
+			turno++;
+		}
+
 	}
 
 	glutPostRedisplay();
