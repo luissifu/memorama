@@ -25,19 +25,13 @@ const int cardHeight = 110;
 
 int elapsed_time = 0;
 bool started = false;
-int contador=0;
-int turno=0;
-int actual=0;
-int anterior=0;
-int anteriorx=0;
-int anteriory=0;
-int actualx=0;
-int actualy=0;
-int preanterior=-1;
-int preanteriorx=-1;
-int pares=0;
+int turno = 0;
+int pares = 0;
 
 Card cards[cardNum];
+
+Card* first;
+Card* second;
 
 struct color {
 	int r;
@@ -108,9 +102,13 @@ void gameInit() {
 		cards[i].y = (cardHeight + 10) * (i / (cardNum / rows)) + 50;
 		cards[i].setValue(pairs.top());
 		cards[i].setShow(false);
-		turno=0;
 		pairs.pop();
 	}
+
+	started = false;
+	pares = 0;
+	elapsed_time = 0;
+	turno = 0;
 }
 
 
@@ -184,36 +182,48 @@ void convertTime(int t) {
 }
 
 void mouse(int button, int state, int x, int y) {
-    if (started){
+	if (!started)
+		started = true;
+	
+	if (first != NULL && second != NULL)
+	{
+		if (first->getValue() == second->getValue())
+		{
+			pares++;
+		}
+		else
+		{
+			first->setShow(false);
+			second->setShow(false);
+		}
+
+		first = NULL;
+		second = NULL;
+		turno++;
+	}
+
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP)
 	{
 
 		for (int i = 0; i < cardNum; i++)
 		{
-			if (cards[i].inside(x,y))
+			if (cards[i].inside(x,y) && !cards[i].shouldShow())
 			{
+				if (first == NULL)
+				{
+					first = &cards[i];
+				}
+				else if (second == NULL)
+				{
+					second = &cards[i];
+				}
+
 				cards[i].flip();
-				anterior=actual;
-				actual=cards[i].getValue();
-            	anteriorx=actualx;
-                actualx=i;
-
-
-				contador++;
-
-		if((contador%2)==0){
-            if(anterior != actual){
-                cards[actualx].setShow(false);
-                cards[anteriorx].setShow(false);}
-                else {pares++;}
-
-            turno++;
-		}
 			}
 		}
 
 	}
-    }
+
 	glutPostRedisplay();
 }
 
@@ -239,21 +249,21 @@ void display() {
 		drawText(800, 580, "Esc-Salir", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
 		drawText(20, 560, "Luis Eduardo Sifuentes a01138688", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
 		drawText(20, 580, "Jose Luis Padilla a01136406", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
-		if(pares==8){
+		
+		if (pares == cardNum/2)
+		{
+			glBegin(GL_POLYGON);
+				glVertex3f(60.0f,100.0f,0.0);
+				glVertex3f(60.0f,400.0f,0.0f);
+				glVertex3f(840.0f,400.0f,0.0f);
+				glVertex3f(840.0f,100.0f,0.0f);
+			glEnd();
 
-            glBegin(GL_POLYGON);//start drawing a line loop
-            glVertex3f(60.0f,100.0f,0.0);//left of window
-            glVertex3f(60.0f,400.0f,0.0f);//bottom of window
-            glVertex3f(840.0f,400.0f,0.0f);//top of window
-            glVertex3f(840.0f,100.0f,0.0f);//right of window
-    glEnd();//end drawing of line loop
+			drawText(250, 250, "Felicidades Ganaste en:", GLUT_BITMAP_HELVETICA_18, stopped.r, stopped.g, stopped.b);
+			drawText(450, 250,toString(turno), GLUT_BITMAP_HELVETICA_18, stopped.r, stopped.g, stopped.b);
+			drawText(500, 250, "turnos", GLUT_BITMAP_HELVETICA_18, stopped.r, stopped.g, stopped.b);
 
-
-        drawText(250, 250, "Felicidades Ganaste en:", GLUT_BITMAP_HELVETICA_18, stopped.r, stopped.g, stopped.b);
-        drawText(450, 250,toString(turno), GLUT_BITMAP_HELVETICA_18, stopped.r, stopped.g, stopped.b);
-        drawText(500, 250, "turnos", GLUT_BITMAP_HELVETICA_18, stopped.r, stopped.g, stopped.b);
-
-        started = false;
+			started = false;
 		}
 	glFlush();
 }
@@ -274,8 +284,6 @@ void keyboard(unsigned char key, int x, int y) {
 		break;
 		case 'R':
 		case 'r':
-			elapsed_time = 0;
-			started = false;
 			gameInit();
 		break;
 		default:
