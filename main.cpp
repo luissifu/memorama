@@ -206,10 +206,10 @@ void convertTime(int t) {
 void mouse(int button, int state, int mx, int my) {
 	int x = mx * glWidth / winWidth;
 	int y = my * glHeight / winHeight;
-	
+
 	if (!started)
 		started = true;
-	
+
 	if (first != NULL && second != NULL && third != NULL)
 	{
 		if (first->getValue() == second->getValue() && second->getValue() == third->getValue())
@@ -300,7 +300,7 @@ void display() {
 		drawText(800, 580, "Esc-Salir", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
 		drawText(20, 560, "Luis Eduardo Sifuentes a01138688", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
 		drawText(20, 580, "Jose Luis Padilla a01136406", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
-		
+
 		if (pares == cardNum/3)
 		{
 			glBegin(GL_POLYGON);
@@ -317,6 +317,47 @@ void display() {
 			started = false;
 		}
 	glFlush();
+}
+typedef enum {FONDO1,FONDO2,menuiniciar,menureiniciar,menupausar,menuexit}
+opcionesMenu;
+void onMenu(int opcion)
+{
+    switch(opcion)
+    {
+    case FONDO1:
+        break;
+    case FONDO2:
+        break;
+    case menupausar:
+        started=false;
+        break;
+    case menuiniciar:// Blanco 3
+        started=true;
+        break;
+    case menureiniciar: // Blanco 3
+        gameInit();
+        break;
+    case menuexit:
+        exit(0);
+        break;
+    }
+    glutPostRedisplay();
+}
+void creacionMenu(void)
+{
+    int menuFondo,menuPrincipal;
+
+    menuFondo = glutCreateMenu(onMenu);
+    glutAddMenuEntry("Luis Eduardo Sifuentes A01138688", FONDO1);
+    glutAddMenuEntry("Jose Luis Padilla A01136406", FONDO2);
+
+    menuPrincipal = glutCreateMenu(onMenu);
+    glutAddSubMenu("Autores ", menuFondo);
+    glutAddMenuEntry("Iniciar", menuiniciar);
+    glutAddMenuEntry("Pausar", menupausar);
+    glutAddMenuEntry("Reiniciar", menureiniciar);
+    glutAddMenuEntry("salir", menuexit);
+    glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 
 void keyboard(unsigned char key, int x, int y) {
@@ -349,7 +390,7 @@ void reshape(int newWidth, int newHeight) {
 	//glMatrixMode(GL_PROJECTION);
 	//glLoadIdentity();
 	//gluOrtho2D(0, newWidth, newHeight, 0);
-	
+
 	winWidth = newWidth;
 	winHeight = newHeight;
 }
@@ -367,6 +408,7 @@ int main(int argc, char** argv) {
 	glutDisplayFunc(display);
 	glutKeyboardFunc(keyboard);
 	glutMouseFunc(mouse);
+	creacionMenu( );
 	glutMainLoop();
 	return 0;
 }
