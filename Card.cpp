@@ -2,12 +2,12 @@
 
 Card::Card() {
 	value = 0;
-	show = false;
+	show = selected = false;
 }
 
 Card::Card(int value) {
 	this->value = value;
-	show = false;
+	show = selected = false;
 }
 
 void Card::flip() {
@@ -31,7 +31,14 @@ void Card::setValue(int value) {
 }
 
 void Card::draw() {
-	glColor3ub(255,255,255);
+	if (selected)
+	{
+		glColor3ub(200, 255, 255);
+	}
+	else
+	{
+		glColor3ub(255, 255, 255);
+	}
 	glBegin(GL_POLYGON);
 		glVertex2f(       x,        y);
 		glVertex2f( x+width,        y);
@@ -58,4 +65,13 @@ bool Card::inside(int px, int py) {
 		return false;
 
 	return true;
+}
+
+
+bool Card::isSelected() {
+	return selected;
+}
+
+void Card::setSelected(bool select) {
+	selected = select;
 }

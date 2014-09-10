@@ -11,8 +11,8 @@
 #include <stdlib.h>
 #include <sstream>
 
-const int cardNum = 20;
-const int rows = 2;
+const int cardNum = 27;
+const int rows = 3;
 
 const int winWidth = 900;
 const int winHeight = 600;
@@ -32,6 +32,7 @@ Card cards[cardNum];
 
 Card* first;
 Card* second;
+Card* third;
 
 struct color {
 	int r;
@@ -42,8 +43,8 @@ struct color {
 color stopped;
 color running;
 
-std::stack<int> generatePairs() {
-	const int ntg = cardNum/2;
+std::stack<int> generateTriples() {
+	const int ntg = cardNum/3;
 
 	std::stack<int> data;
 
@@ -88,27 +89,48 @@ std::stack<int> generatePairs() {
 		data.push(rndnum);
 	}
 
+	//third
+	for (int i = 0; i < ntg; i++)
+	{
+		instack[i] = false;
+	}
+
+	for (int i = 0; i < ntg; i++)
+	{
+		int rndnum = std::rand() % ntg;
+		while (instack[rndnum])
+		{
+			rndnum = std::rand() % ntg;
+		}
+
+		instack[rndnum] = true;
+
+		data.push(rndnum);
+	}
+
 	return data;
 }
 
 void gameInit() {
-	std::stack<int> pairs = generatePairs();
+	std::stack<int> triples = generateTriples();
 
 	for (int i = 0; i < cardNum; i++)
 	{
 		cards[i].width = cardWidth;
 		cards[i].height = cardHeight;
-		cards[i].x = (cardWidth + 10) * (i % (cardNum / rows)) + 50;
+		cards[i].x = (cardWidth + 10) * (i % (cardNum / rows)) + 90;
 		cards[i].y = (cardHeight + 10) * (i / (cardNum / rows)) + 50;
-		cards[i].setValue(pairs.top());
+		cards[i].setValue(triples.top());
 		cards[i].setShow(false);
-		pairs.pop();
+		triples.pop();
 	}
 
 	started = false;
 	pares = 0;
 	elapsed_time = 0;
 	turno = 0;
+
+	first = second = third = NULL;
 }
 
 
@@ -185,9 +207,9 @@ void mouse(int button, int state, int x, int y) {
 	if (!started)
 		started = true;
 	
-	if (first != NULL && second != NULL)
+	if (first != NULL && second != NULL && third != NULL)
 	{
-		if (first->getValue() == second->getValue())
+		if (first->getValue() == second->getValue() && second->getValue() == third->getValue())
 		{
 			pares++;
 		}
@@ -195,10 +217,16 @@ void mouse(int button, int state, int x, int y) {
 		{
 			first->setShow(false);
 			second->setShow(false);
+			third->setShow(false);
 		}
+
+		first->setSelected(false);
+		second->setSelected(false);
+		third->setSelected(false);
 
 		first = NULL;
 		second = NULL;
+		third = NULL;
 		turno++;
 	}
 
@@ -217,8 +245,13 @@ void mouse(int button, int state, int x, int y) {
 				{
 					second = &cards[i];
 				}
+				else if (third == NULL)
+				{
+					third = &cards[i];
+				}
 
 				cards[i].flip();
+				cards[i].setSelected(true);
 			}
 		}
 
@@ -238,6 +271,7 @@ void display() {
 			{
 				drawText(cards[i].x + cardWidth / 2 - 5, cards[i].y + cardHeight / 2, toString(cards[i].getValue()), GLUT_BITMAP_HELVETICA_18, 0, 0, 0);
 			}
+			drawText(cards[i].x+10, cards[i].y+25, toString(cards[i].getValue()), GLUT_BITMAP_HELVETICA_18, 0, 0, 255);
 		}
 
 		drawText(700, 450, "Turnos: ", GLUT_BITMAP_HELVETICA_18,running.r, running.g, running.b);
@@ -250,7 +284,7 @@ void display() {
 		drawText(20, 560, "Luis Eduardo Sifuentes a01138688", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
 		drawText(20, 580, "Jose Luis Padilla a01136406", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
 		
-		if (pares == cardNum/2)
+		if (pares == cardNum/3)
 		{
 			glBegin(GL_POLYGON);
 				glVertex3f(60.0f,100.0f,0.0);

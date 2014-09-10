@@ -18,6 +18,8 @@ class Card {
 		void flip();
 		bool shouldShow();
 		void setShow(bool show);
+		bool isSelected();
+		void setSelected(bool select);
 		int getValue();
 		void setValue(int value);
 		void draw();
@@ -25,6 +27,7 @@ class Card {
 	private:
 		int value;
 		bool show;
+		bool selected;
 };
 
 #endif
