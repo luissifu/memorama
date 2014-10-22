@@ -43,9 +43,14 @@ void Card::draw() {
 	glPushMatrix();
 	glColor3f(0,0,1);
 		glTranslatef(x, y, 0.0);
-        glutWireCube(2);
+		glScalef(0.5,1.0,0.02);
+		glColor3ub(255, 255, 255);
+		glutSolidCube(2);
+		glColor3f(0,0,0);
+		glutWireCube(2);
 	glPopMatrix();
 
+	/*
 	if (!show)
 	{
 		glColor3ub(255,0,0);
@@ -56,6 +61,7 @@ void Card::draw() {
 			glVertex2f(       x+5, y+height-5);
 		glEnd();
 	}
+	*/
 }
 
 bool Card::inside(int px, int py) {

@@ -20,8 +20,8 @@ int winHeight = 600;
 const int glWidth = 900;
 const int glHeight = 600;
 
-const float cardWidth = 2.0;
-const float cardHeight = 2.0;
+const float cardWidth = 1.3;
+const float cardHeight = 2.2;
 
 int elapsed_time = 0;
 bool started = false;
