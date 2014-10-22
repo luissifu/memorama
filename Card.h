@@ -10,10 +10,10 @@ class Card {
 		Card();
 		Card(int value);
 		//
-		int x;
-		int y;
-		int width;
-		int height;
+		float x;
+		float y;
+		float width;
+		float height;
 		//
 		void flip();
 		bool shouldShow();

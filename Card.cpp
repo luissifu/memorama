@@ -39,14 +39,12 @@ void Card::draw() {
 	{
 		glColor3ub(255, 255, 255);
 	}
+	
+	glPushMatrix();
 	glColor3f(0,0,1);
+		glTranslatef(x, y, 0.0);
         glutWireCube(2);
-	glBegin(GL_POLYGON);
-		glVertex2f(       x,        y);
-		glVertex2f( x+width,        y);
-		glVertex2f( x+width, y+height);
-		glVertex2f(       x, y+height);
-	glEnd();
+	glPopMatrix();
 
 	if (!show)
 	{

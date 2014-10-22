@@ -20,8 +20,8 @@ int winHeight = 600;
 const int glWidth = 900;
 const int glHeight = 600;
 
-const int cardWidth = 70;
-const int cardHeight = 110;
+const float cardWidth = 2.0;
+const float cardHeight = 2.0;
 
 int elapsed_time = 0;
 bool started = false;
@@ -119,8 +119,8 @@ void gameInit() {
 	{
 		cards[i].width = cardWidth;
 		cards[i].height = cardHeight;
-		cards[i].x = (cardWidth + 10) * (i % (cardNum / rows)) + 90;
-		cards[i].y = (cardHeight + 10) * (i / (cardNum / rows)) + 50;
+		cards[i].x = (cardWidth) * (i % (cardNum / rows)) - 5;
+		cards[i].y = (cardHeight + 0.001) * (i / (cardNum / rows));
 		cards[i].setValue(triples.top());
 		cards[i].setShow(false);
 		triples.pop();
@@ -137,7 +137,13 @@ void gameInit() {
 
 void init() {
 	glClearColor(0.011, 0.75, 0.23, 1.0);
-	gluOrtho2D(0, glWidth, glHeight, 0);
+	
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(-8, 8, -6.4, 6.4, 0, 1);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 
 	stopped.r = 48;
 	stopped.g = 98;
@@ -273,7 +279,9 @@ void mouse(int button, int state, int mx, int my) {
 
 void display() {
 	glClear(GL_COLOR_BUFFER_BIT);
+	glMatrixMode(GL_MODELVIEW);
 
+	glPushMatrix();
 
         if (started)
         {
@@ -327,6 +335,9 @@ void display() {
 
 			started = false;
 		}
+
+		glPopMatrix();
+
 	glFlush();
 }
 
