@@ -22,8 +22,8 @@ class Card {
 		void setSelected(bool select);
 		int getValue();
 		void setValue(int value);
-		void draw();
-		bool inside(int px, int py);
+		void draw(float ang);
+		bool inside(float px, float py);
 	private:
 		int value;
 		bool show;

@@ -29,6 +29,8 @@ bool showHelp = true;
 int turno = 0;
 int pares = 0;
 
+float angle = 0;
+
 Card cards[cardNum];
 
 Card* first;
@@ -167,6 +169,11 @@ void timer(int value) {
 		glutPostRedisplay();
 	}
 	glutTimerFunc(100,timer,0);
+
+	angle += 5;
+
+	if (angle >= 180.0)
+		angle = -180.0;
 }
 
 void drawText(float x, float y, std::string text, void* font, int r, int g, int b) {
@@ -204,8 +211,13 @@ std::string convertTime(int t) {
 }
 
 void mouse(int button, int state, int mx, int my) {
-	int x = mx * glWidth / winWidth;
-	int y = my * glHeight / winHeight;
+	printf("%d:%d\n", mx, my);
+	
+	float x = (mx * 16.0) / winWidth - 8.0;
+	float y = (winHeight - my) * 12.8 / winHeight - 6.4;
+
+	printf("%f:%f\n", x, y);
+
 
 	if (!started)
 		started = true;
@@ -294,7 +306,7 @@ void display() {
 
 		for (int i = 0; i < cardNum; i++)
 		{
-			cards[i].draw();
+			cards[i].draw(angle);
 			if (cards[i].shouldShow())
 			{
 				drawText(cards[i].x + 0.05, cards[i].y + 0.05, toString(cards[i].getValue()), GLUT_BITMAP_HELVETICA_18, 0, 0, 0);

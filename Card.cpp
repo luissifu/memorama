@@ -30,7 +30,7 @@ void Card::setValue(int value) {
 	this->value = value;
 }
 
-void Card::draw() {
+void Card::draw(float ang) {
 	if (selected)
 	{
 		glColor3ub(255, 255, 200);
@@ -46,6 +46,7 @@ void Card::draw() {
 		glScalef(0.5,1.0,0.02);
 		if (selected)
 		{
+			glRotatef(ang, 0.0, 1.0, 0.0);
 			glColor3ub(255, 255, 200);
 		}
 		else if (!show)
@@ -54,6 +55,7 @@ void Card::draw() {
 		}
 		else
 		{
+			glRotatef(ang, 0.0, 1.0, 0.0);
 			glColor3ub(255, 255, 255);
 		}
 		glutSolidCube(2);
@@ -61,24 +63,12 @@ void Card::draw() {
 		glutWireCube(2);
 	glPopMatrix();
 
-	/*
-	if (!show)
-	{
-		glColor3ub(255,0,0);
-		glBegin(GL_POLYGON);
-			glVertex2f(       x+5,        y+5);
-			glVertex2f( x+width-5,        y+5);
-			glVertex2f( x+width-5, y+height-5);
-			glVertex2f(       x+5, y+height-5);
-		glEnd();
-	}
-	*/
 }
 
-bool Card::inside(int px, int py) {
-	if (px < x || px > x + width)
+bool Card::inside(float px, float py) {
+	if (px < x || px > x + 1.1)
 		return false;
-	else if (py < y || py > y + height)
+	else if (py < y || py > y + 1.95)
 		return false;
 
 	return true;
