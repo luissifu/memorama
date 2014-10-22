@@ -62,12 +62,14 @@ void Card::draw(float ang) {
             glEnable (GL_POLYGON_STIPPLE);
 			glColor3f (1.0, 1.0, 0.0);
 			glPolygonStipple (tres);
+			glutSolidCube(2);
 			glDisable(GL_POLYGON_STIPPLE);
         }
         else if(value == 6){
 			glEnable (GL_POLYGON_STIPPLE);
 			glColor3f (1.0, 1.0, 0.0);
 			glPolygonStipple (seis);
+			glutSolidCube(2);
 			glDisable(GL_POLYGON_STIPPLE);
         }
         else {
