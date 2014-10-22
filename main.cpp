@@ -315,6 +315,7 @@ void display() {
 				glVertex3f(60.0f,100.0f,0.0);
 				glVertex3f(60.0f,400.0f,0.0f);
 				glVertex3f(840.0f,400.0f,0.0f);
+
 				glVertex3f(840.0f,100.0f,0.0f);
 			glEnd();
 
@@ -397,6 +398,20 @@ void keyboard(unsigned char key, int x, int y) {
 		case 'A':
 			showHelp=!showHelp;
 		break;
+		 case 'O':
+    case 'o':
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glOrtho(-8, 8, -6.4, 6.4, 0, 1);
+        break;
+		  case 'F':
+    case 'f':
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glFrustum(-8, 8, -6.4, 6.4, 1, 10);
+        gluLookAt(0, 0, 1.2, 0, 0, 0, 0, 1,0);
+        break;
+
 		default:
 		break;
 	}

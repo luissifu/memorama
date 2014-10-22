@@ -39,6 +39,8 @@ void Card::draw() {
 	{
 		glColor3ub(255, 255, 255);
 	}
+	glColor3f(0,0,1);
+        glutWireCube(2);
 	glBegin(GL_POLYGON);
 		glVertex2f(       x,        y);
 		glVertex2f( x+width,        y);
