@@ -58,14 +58,14 @@ void Card::draw(float ang) {
 			glRotatef(ang, 0.0, 1.0, 0.0);
 			glColor3ub(255, 255, 255);
 		}
-        if(value == 3){
+        if(value == 3 && selected){
             glEnable (GL_POLYGON_STIPPLE);
 			glColor3f (1.0, 1.0, 0.0);
 			glPolygonStipple (tres);
 			glutSolidCube(2);
 			glDisable(GL_POLYGON_STIPPLE);
         }
-        else if(value == 6){
+        else if(value == 6 && selected){
 			glEnable (GL_POLYGON_STIPPLE);
 			glColor3f (1.0, 1.0, 0.0);
 			glPolygonStipple (seis);
