@@ -344,6 +344,22 @@ void display() {
 				glVertex3f(840.0f,100.0f,0.0f);
 			glEnd();
 
+			for (int i = 0; i < turno; i++)
+			{
+				float tx = (i % 10) * 1.5 - 7;
+				float ty = i / 10;
+
+				glPushMatrix();
+				glTranslatef(tx, ty, 0.0);
+				glScalef(0.25, 0.25, 0.1);
+				glRotatef(angle, 0.0, 1.0, 0.0);
+				glColor3f(1, 1, 1);
+				glutWireTeapot(2);
+				glColor3ub(stopped.r, stopped.g, stopped.b);
+				glutSolidTeapot(2);
+				glPopMatrix();
+			}
+
 			drawText(250, 250, "Felicidades Ganaste en:", GLUT_BITMAP_HELVETICA_18, stopped.r, stopped.g, stopped.b);
 			drawText(450, 250,toString(turno), GLUT_BITMAP_HELVETICA_18, stopped.r, stopped.g, stopped.b);
 			drawText(500, 250, "turnos", GLUT_BITMAP_HELVETICA_18, stopped.r, stopped.g, stopped.b);
