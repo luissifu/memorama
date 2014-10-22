@@ -44,7 +44,18 @@ void Card::draw() {
 	glColor3f(0,0,1);
 		glTranslatef(x, y, 0.0);
 		glScalef(0.5,1.0,0.02);
-		glColor3ub(255, 255, 255);
+		if (selected)
+		{
+			glColor3ub(255, 255, 200);
+		}
+		else if (!show)
+		{
+			glColor3ub(255, 0, 0);
+		}
+		else
+		{
+			glColor3ub(255, 255, 255);
+		}
 		glutSolidCube(2);
 		glColor3f(0,0,0);
 		glutWireCube(2);

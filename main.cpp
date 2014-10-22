@@ -169,9 +169,9 @@ void timer(int value) {
 	glutTimerFunc(100,timer,0);
 }
 
-void drawText(int x, int y, std::string text, void* font, int r, int g, int b) {
+void drawText(float x, float y, std::string text, void* font, int r, int g, int b) {
 	glColor3ub(r, g, b);
-	glRasterPos2i(x, y);
+	glRasterPos3f(x, y, 0);
 
 	for (std::string::iterator i = text.begin(); i != text.end(); ++i)
 	{
@@ -285,11 +285,11 @@ void display() {
 
         if (started)
         {
-            drawText(100, 451, convertTime(elapsed_time), GLUT_BITMAP_TIMES_ROMAN_24, running.r, running.g, running.b);
+            drawText(-6, -4, convertTime(elapsed_time), GLUT_BITMAP_TIMES_ROMAN_24, running.r, running.g, running.b);
         }
         else
         {
-            drawText(100, 451, convertTime(elapsed_time), GLUT_BITMAP_TIMES_ROMAN_24, stopped.r, stopped.g, stopped.b);
+			drawText(-6, -4, convertTime(elapsed_time), GLUT_BITMAP_TIMES_ROMAN_24, stopped.r, stopped.g, stopped.b);
         }
 
 		for (int i = 0; i < cardNum; i++)
@@ -297,23 +297,23 @@ void display() {
 			cards[i].draw();
 			if (cards[i].shouldShow())
 			{
-				drawText(cards[i].x + cardWidth / 2 - 5, cards[i].y + cardHeight / 2, toString(cards[i].getValue()), GLUT_BITMAP_HELVETICA_18, 0, 0, 0);
+				drawText(cards[i].x + 0.05, cards[i].y + 0.05, toString(cards[i].getValue()), GLUT_BITMAP_HELVETICA_18, 0, 0, 0);
 			}
 
 			if (showHelp)
 			{
-				drawText(cards[i].x + 10, cards[i].y + 25, toString(cards[i].getValue()), GLUT_BITMAP_HELVETICA_18, 0, 0, 255);
+				drawText(cards[i].x, cards[i].y, toString(cards[i].getValue()), GLUT_BITMAP_HELVETICA_18, 0, 0, 255);
 			}
 		}
 
-		drawText(700, 450, "Turnos: ", GLUT_BITMAP_HELVETICA_18,running.r, running.g, running.b);
-		drawText(780, 450, toString(turno), GLUT_BITMAP_HELVETICA_18,running.r, running.g, running.b);
-		drawText(025, 450, "Tiempo: ", GLUT_BITMAP_HELVETICA_18,running.r, running.g, running.b);
-		drawText(250, 500, "I-Iniciar", GLUT_BITMAP_HELVETICA_18,running.r, running.g, running.b);
-		drawText(400, 500, "P-Pausar", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
-		drawText(550, 500, "R-Reiniciar", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
-		drawText(670, 530, "A-Mostrar/Ocultar Ayuda", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
-		drawText(800, 580, "Esc-Salir", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
+		drawText(-6, -5, "Turnos: ", GLUT_BITMAP_HELVETICA_18,running.r, running.g, running.b);
+		drawText(-6, -5, toString(turno), GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
+		drawText(-6, -5, "Tiempo: ", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
+		drawText(-6, -5, "I-Iniciar", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
+		drawText(-6, -5, "P-Pausar", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
+		drawText(-6, -5, "R-Reiniciar", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
+		drawText(-6, -5, "A-Mostrar/Ocultar Ayuda", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
+		drawText(-6, -5, "Esc-Salir", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
 		drawText(20, 560, "Luis Eduardo Sifuentes a01138688", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
 		drawText(20, 580, "Jose Luis Padilla a01136406", GLUT_BITMAP_HELVETICA_18, running.r, running.g, running.b);
 
