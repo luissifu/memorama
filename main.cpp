@@ -290,6 +290,7 @@ void mouse(int button, int state, int mx, int my) {
 }
 
 void display() {
+
 	glClear(GL_COLOR_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 
@@ -310,6 +311,7 @@ void display() {
 			if (cards[i].shouldShow())
 			{
 				drawText(cards[i].x + 0.05, cards[i].y + 0.05, toString(cards[i].getValue()), GLUT_BITMAP_HELVETICA_18, 0, 0, 0);
+
 			}
 
 			if (showHelp)
