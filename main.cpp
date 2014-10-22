@@ -13,7 +13,7 @@
 
 const int cardNum = 27;
 const int rows = 3;
-
+bool frust=false;
 int winWidth = 900;
 int winHeight = 600;
 
@@ -163,17 +163,22 @@ std::string toString(int value) {
 }
 
 void timer(int value) {
+     angle += 5;
+
+    if (angle >= 180.0)
+            angle = -180.0;
+
 	if (started)
 	{
 		elapsed_time++;
-		glutPostRedisplay();
+
+
+
 	}
 	glutTimerFunc(100,timer,0);
 
-	angle += 5;
 
-	if (angle >= 180.0)
-		angle = -180.0;
+    glutPostRedisplay();
 }
 
 void drawText(float x, float y, std::string text, void* font, int r, int g, int b) {
@@ -211,12 +216,21 @@ std::string convertTime(int t) {
 }
 
 void mouse(int button, int state, int mx, int my) {
-	printf("%d:%d\n", mx, my);
 
-	float x = (mx * 16.0) / winWidth - 8.0;
-	float y = (winHeight - my) * 12.8 / winHeight - 6.4;
+	float x=0;
+	float y=0;
+	if(!frust)
+{
+   x = (mx * 16.0) / winWidth - 7.5;
+	y = (winHeight - my) * 12.8 / winHeight - 6;
+}else if(frust)
+{
+     x = ((mx * 16.0) / winWidth - 7.5);
+	y = ((winHeight - my) * 12.8 / winHeight - 6);
+}
 
-	printf("%f:%f\n", x, y);
+
+
 
 
 	if (!started)
@@ -336,13 +350,16 @@ void display() {
 
 		if (pares == cardNum/3)
 		{
-			glBegin(GL_POLYGON);
-				glVertex3f(60.0f,100.0f,0.0);
-				glVertex3f(60.0f,400.0f,0.0f);
-				glVertex3f(840.0f,400.0f,0.0f);
 
-				glVertex3f(840.0f,100.0f,0.0f);
-			glEnd();
+		    glPushMatrix();
+                glTranslatef(0, 3, 0.0);
+				glScalef(6, 4, 0.1);
+				glRotatef(angle, 0.0, 1.0, 0.0);
+				glColor3f(0.15,.56, .15);
+				glutSolidCube(1);
+				glColor3f(1, 1, 1);
+				glutWireCube(1);
+				glPopMatrix();
 
 			for (int i = 0; i < turno; i++)
 			{
@@ -350,21 +367,25 @@ void display() {
 				float ty = i / 10;
 
 				glPushMatrix();
-				glTranslatef(tx, ty, 0.0);
+				glTranslatef(tx, -ty, 0.0);
 				glScalef(0.25, 0.25, 0.1);
 				glRotatef(angle, 0.0, 1.0, 0.0);
-				glColor3f(1, 1, 1);
-				glutWireTeapot(2);
-				glColor3ub(stopped.r, stopped.g, stopped.b);
+
+				//glColor3ub(stopped.r, stopped.g, stopped.b);
+
+				glColor3f(0, 0, 1);
 				glutSolidTeapot(2);
+				glColor3f(0, 1, 0);
+				glutWireTeapot(2);
 				glPopMatrix();
 			}
 
-			drawText(250, 250, "Felicidades Ganaste en:", GLUT_BITMAP_HELVETICA_18, stopped.r, stopped.g, stopped.b);
-			drawText(450, 250,toString(turno), GLUT_BITMAP_HELVETICA_18, stopped.r, stopped.g, stopped.b);
-			drawText(500, 250, "turnos", GLUT_BITMAP_HELVETICA_18, stopped.r, stopped.g, stopped.b);
-			drawText(250, 300, "Tu tiempo fue:", GLUT_BITMAP_HELVETICA_18, stopped.r, stopped.g, stopped.b);
-			drawText(500, 300, convertTime(elapsed_time), GLUT_BITMAP_HELVETICA_18, stopped.r, stopped.g, stopped.b);
+			drawText(-1.5, 3.5, "Felicidades Ganaste en:", GLUT_BITMAP_HELVETICA_18, stopped.r, stopped.g, stopped.b);
+			drawText(0, 3,toString(turno), GLUT_BITMAP_HELVETICA_18, stopped.r, stopped.g, stopped.b);
+			drawText(-2, 3, "turnos", GLUT_BITMAP_HELVETICA_18, stopped.r, stopped.g, stopped.b);
+			drawText(1, 3, "teteras", GLUT_BITMAP_HELVETICA_18, stopped.r, stopped.g, stopped.b);
+			drawText(-2, 2.5, "Tu tiempo fue:", GLUT_BITMAP_HELVETICA_18, stopped.r, stopped.g, stopped.b);
+			drawText(1, 2.5, convertTime(elapsed_time), GLUT_BITMAP_HELVETICA_18, stopped.r, stopped.g, stopped.b);
 
 			started = false;
 		}
@@ -447,13 +468,15 @@ void keyboard(unsigned char key, int x, int y) {
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
         glOrtho(-8, 8, -6.4, 6.4, 0, 1);
+        frust=false;
         break;
 		  case 'F':
     case 'f':
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
         glFrustum(-8, 8, -6.4, 6.4, 1, 10);
-        gluLookAt(0, 0, 1.2, 0, 0, 0, 0, 1,0);
+        gluLookAt(0, 0, 1.1, 0, 0, 0, 0, 1,0);
+        frust=true;
         break;
 
 		default:

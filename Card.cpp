@@ -56,8 +56,10 @@ void Card::draw(float ang) {
 		else
 		{
 			glRotatef(ang, 0.0, 1.0, 0.0);
-			glColor3ub(255, 255, 255);
-		}
+			glColor3ub(255, 255, 255);}
+
+
+
         if(value == 3 && selected){
             glEnable (GL_POLYGON_STIPPLE);
 			glColor3f (1.0, 1.0, 0.0);
