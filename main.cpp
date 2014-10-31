@@ -118,13 +118,13 @@ std::stack<int> generateTriples() {
 	return data;
 }
 
-void textureInit() {	
+void textureInit() {
 	glGenTextures(6, texName); //Make room for our texture
-	
-	Image* image = loadBMP("dragon.bmp");
+
+	Image* image = loadBMP("C://Users//pepe//Desktop//programasc++//memorama//dragon.bmp");
 	loadTexture(image, texName[0]);
-	
-	image = loadBMP("ciervo.bmp");
+
+	image = loadBMP("C://Users//pepe//Desktop//programasc++//memorama//ciervo.bmp");
 	loadTexture(image, texName[1]);
 
 	/*
