@@ -84,6 +84,8 @@ class Card {
 		float y;
 		float width;
 		float height;
+		unsigned int showId;
+		unsigned int selectedId;
 		//
 		void flip();
 		bool shouldShow();

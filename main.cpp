@@ -11,7 +11,6 @@
 #include <stdlib.h>
 #include <sstream>
 #include "Imageloader.h"
-#include <assert.h>
 
 const int cardNum = 27;
 const int rows = 3;
@@ -38,6 +37,9 @@ Card cards[cardNum];
 Card* first;
 Card* second;
 Card* third;
+
+const int TEXTURE_COUNT = 6;
+static GLuint texName[TEXTURE_COUNT];
 
 struct color {
 	int r;
@@ -116,6 +118,31 @@ std::stack<int> generateTriples() {
 	return data;
 }
 
+void textureInit() {	
+	glGenTextures(6, texName); //Make room for our texture
+	
+	Image* image = loadBMP("dragon.bmp");
+	loadTexture(image, texName[0]);
+	
+	image = loadBMP("ciervo.bmp");
+	loadTexture(image, texName[1]);
+
+	/*
+	image = loadBMP("/Users/mariaroque/Imagenes/LOBO.bmp");
+	loadTexture(image, texName[1]);
+	image = loadBMP("/Users/mariaroque/Imagenes/SOL.bmp");
+	loadTexture(image, texName[2]);
+	image = loadBMP("/Users/mariaroque/Imagenes/LEON.bmp");
+	loadTexture(image, texName[3]);
+	image = loadBMP("/Users/mariaroque/Imagenes/TEC.bmp");
+	loadTexture(image, texName[4]);
+	image = loadBMP("/Users/mariaroque/Imagenes/earth.bmp");
+	loadTexture(image, texName[5]);
+	*/
+
+	delete image;
+}
+
 void gameInit() {
 	std::stack<int> triples = generateTriples();
 
@@ -127,6 +154,8 @@ void gameInit() {
 		cards[i].y = (cardHeight + 0.001) * (i / (cardNum / rows));
 		cards[i].setValue(triples.top());
 		cards[i].setShow(false);
+		cards[i].showId = texName[0];
+		cards[i].selectedId = texName[1];
 		triples.pop();
 	}
 
@@ -156,6 +185,8 @@ void init() {
 	running.r = 15;
 	running.g = 56;
 	running.b = 15;
+
+	glEnable(GL_TEXTURE_2D);
 }
 
 std::string toString(int value) {
@@ -173,13 +204,9 @@ void timer(int value) {
 	if (started)
 	{
 		elapsed_time++;
-
-
-
 	}
+
 	glutTimerFunc(100,timer,0);
-
-
     glutPostRedisplay();
 }
 
@@ -222,18 +249,15 @@ void mouse(int button, int state, int mx, int my) {
 	float x=0;
 	float y=0;
 	if(!frust)
-{
-   x = (mx * 16.0) / winWidth - 7.5;
-	y = (winHeight - my) * 12.8 / winHeight - 6;
-}else if(frust)
-{
-     x = ((mx * 16.0) / winWidth - 7.5);
-	y = ((winHeight - my) * 12.8 / winHeight - 6);
-}
-
-
-
-
+	{
+		x = (mx * 16.0) / winWidth - 7.5;
+		y = (winHeight - my) * 12.8 / winHeight - 6;
+	}
+	else if(frust)
+	{
+		x = ((mx * 16.0) / winWidth - 7.5);
+		y = ((winHeight - my) * 12.8 / winHeight - 6);
+	}
 
 	if (!started)
 		started = true;
@@ -306,10 +330,8 @@ void mouse(int button, int state, int mx, int my) {
 }
 
 void display() {
-
 	glClear(GL_COLOR_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
-
 	glPushMatrix();
 
         if (started)
@@ -393,8 +415,7 @@ void display() {
 		}
 
 		glPopMatrix();
-
-	glFlush();
+	glutSwapBuffers();
 }
 
 typedef enum {autor1,autor2,menuiniciar,menureiniciar,menupausar,menuayuda,menuexit}
@@ -497,11 +518,12 @@ void reshape(int newWidth, int newHeight) {
 
 int main(int argc, char** argv) {
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
 	glutInitWindowSize(winWidth,winHeight);
 	glutInitWindowPosition(100, 100);
 	glutCreateWindow("memorama");
 	init();
+	textureInit();
 	gameInit();
 	glutTimerFunc(100, timer, 0);
 	glutReshapeFunc(reshape);
