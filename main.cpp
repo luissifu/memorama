@@ -10,6 +10,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sstream>
+#include "Imageloader.h"
+#include <assert.h>
 
 const int cardNum = 27;
 const int rows = 3;
