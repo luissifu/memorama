@@ -250,12 +250,12 @@ void mouse(int button, int state, int mx, int my) {
 	float y=0;
 	if(!frust)
 	{
-		x = (mx * 16.0) / winWidth - 7.5;
+		x = (mx * 16.0) / winWidth - 8;
 		y = (winHeight - my) * 12.8 / winHeight - 6;
 	}
 	else if(frust)
 	{
-		x = ((mx * 16.0) / winWidth - 7.5);
+		x = ((mx * 16.0) / winWidth - 8);
 		y = ((winHeight - my) * 12.8 / winHeight - 6);
 	}
 
